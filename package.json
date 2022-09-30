@@ -4,7 +4,8 @@
   "description": "API for managing personal budget",
   "main": "app.js",
   "scripts": {
-    "test": "mocha"
+    "test": "mocha",
+    "start": "nodemon --watch app.js --watch server/"
   },
   "repository": {
     "type": "git",
