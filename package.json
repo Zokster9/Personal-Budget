@@ -1,0 +1,27 @@
+{
+  "name": "personal-budget",
+  "version": "1.0.0",
+  "description": "API for managing personal budget",
+  "main": "app.js",
+  "scripts": {
+    "test": "mocha"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Zokster9/Personal-Budget.git"
+  },
+  "keywords": [
+    "API",
+    "Personal-Budget",
+    "Envelope",
+    "budgeting"
+  ],
+  "author": "Zoran Bukorac",
+  "bugs": {
+    "url": "https://github.com/Zokster9/Personal-Budget/issues"
+  },
+  "homepage": "https://github.com/Zokster9/Personal-Budget#readme",
+  "devDependencies": {
+    "nodemon": "^2.0.20"
+  }
+}
