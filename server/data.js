@@ -46,7 +46,7 @@ class Envelope {
 }
 
 const isPositiveNum = input => {
-    if (typeof input === 'number' && input > 0) {
+    if (typeof input === 'number' && input >= 0) {
         return true
     } else {
         throw new Error('Value must be a number greater than 0')
@@ -93,8 +93,18 @@ const getEnvelopeById = id => {
     throw new Error('Envelope with this id does not exist')
 }
 
+const updateEnvelope = (id, name, spendingAmount) => {
+    const envelope = getEnvelopeById(id)
+    envelope.name = name
+    if (envelope.spendMoney(spendingAmount)) {
+        return envelope
+    }
+    return null
+}
+
 module.exports = {
     getAllEnvelopes,
     addEnvelope,
     getEnvelopeById,
+    updateEnvelope,
 }

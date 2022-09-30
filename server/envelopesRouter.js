@@ -1,5 +1,5 @@
 const express = require('express');
-const { getAllEnvelopes, addEnvelope, getEnvelopeById } = require('./data')
+const { getAllEnvelopes, addEnvelope, getEnvelopeById, updateEnvelope } = require('./data')
 
 const envelopesRouter = express.Router();
 
@@ -33,6 +33,19 @@ envelopesRouter.post('/', (req, res, next) => {
 
 envelopesRouter.get('/:envelopeId', (req, res, next) => {
     res.send(req.envelope)
+})
+
+envelopesRouter.put('/:envelopeId', (req, res, next) => {
+    try {
+        const updatedEnvelope = updateEnvelope(req.envelope.id, req.body.name, Number(req.body.spendingAmount))
+        if (updatedEnvelope) {
+            res.send(updatedEnvelope)
+        } else {
+            res.status(400).send()
+        }
+    } catch (err) {
+        res.status(400).send(err)
+    }
 })
 
 module.exports = envelopesRouter
