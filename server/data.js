@@ -85,7 +85,16 @@ const addEnvelope = (name, budget) => {
     }
 }
 
+const getEnvelopeById = id => {
+    const index = envelopes.findIndex(envelope => envelope.id === id)
+    if (index !== -1) {
+        return envelopes[index]
+    }
+    throw new Error('Envelope with this id does not exist')
+}
+
 module.exports = {
     getAllEnvelopes,
     addEnvelope,
+    getEnvelopeById,
 }
