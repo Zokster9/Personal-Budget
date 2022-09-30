@@ -53,6 +53,14 @@ const isPositiveNum = input => {
     }
 }
 
+const nameExists = name => {
+    const found = envelopes.find(envelope => envelope.name === name)
+    if (!found) {
+        return false
+    }
+    throw new Error('Name already exists')
+}
+
 const envelopes = []
 let id = 0
 
@@ -70,12 +78,14 @@ generateEnvelopes()
 const getAllEnvelopes = () => envelopes
 
 const addEnvelope = (name, budget) => {
-    if (isPositiveNum(budget)) {
-        envelopes.push(new Envelope(++id, name, budget))
-        return true
+    if (isPositiveNum(budget) && !nameExists(name)) {
+        const newEnvelope = new Envelope(++id, name, budget)
+        envelopes.push(newEnvelope)
+        return newEnvelope
     }
 }
 
 module.exports = {
     getAllEnvelopes,
+    addEnvelope,
 }
