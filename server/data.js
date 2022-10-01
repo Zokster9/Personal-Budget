@@ -117,6 +117,13 @@ const transferMoney = (sourceEnvelopeId, targetEnvelopeId, amount) => {
     return null
 }
 
+const addMoneyToAllEnvelopes = money => {
+    for (let envelope of envelopes) {
+        envelope.addMoney(money)
+    }
+    return envelopes
+}
+
 module.exports = {
     getAllEnvelopes,
     addEnvelope,
@@ -124,4 +131,5 @@ module.exports = {
     updateEnvelope,
     deleteEnvelopeById,
     transferMoney,
+    addMoneyToAllEnvelopes,
 }
