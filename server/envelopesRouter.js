@@ -1,5 +1,5 @@
 const express = require('express');
-const { getAllEnvelopes, addEnvelope, getEnvelopeById, updateEnvelope } = require('./data')
+const { getAllEnvelopes, addEnvelope, getEnvelopeById, updateEnvelope, deleteEnvelopeById } = require('./data')
 
 const envelopesRouter = express.Router();
 
@@ -46,6 +46,11 @@ envelopesRouter.put('/:envelopeId', (req, res, next) => {
     } catch (err) {
         res.status(400).send(err)
     }
+})
+
+envelopesRouter.delete('/:envelopeId', (req, res, next) => {
+    deleteEnvelopeById(req.envelope.id)
+    res.status(204).send()
 })
 
 module.exports = envelopesRouter

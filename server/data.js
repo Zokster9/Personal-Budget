@@ -102,9 +102,16 @@ const updateEnvelope = (id, name, spendingAmount) => {
     return null
 }
 
+const deleteEnvelopeById = id => {
+    const index = envelopes.findIndex(envelope => envelope.id === id)
+    envelopes.splice(index, 1)
+    return true
+}
+
 module.exports = {
     getAllEnvelopes,
     addEnvelope,
     getEnvelopeById,
     updateEnvelope,
+    deleteEnvelopeById,
 }
