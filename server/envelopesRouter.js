@@ -1,6 +1,6 @@
 const express = require('express');
 const { getAllEnvelopes, addEnvelope, getEnvelopeById, updateEnvelope, 
-    deleteEnvelopeById, transferMoney } = require('./data')
+    deleteEnvelopeById, transferMoney, addMoneyToAllEnvelopes } = require('./data')
 
 const envelopesRouter = express.Router();
 
@@ -72,6 +72,19 @@ envelopesRouter.post('/:envelopeId/:targetEnvelopeId', (req, res, next) => {
             res.send(updatedEnvelopes)
         } else {
             res.status(400).send(err)
+        }
+    } catch (err) {
+        res.status(400).send(err)
+    }
+})
+
+envelopesRouter.put('/', (req, res, next) => {
+    try {
+        const envelopes = addMoneyToAllEnvelopes(Number(req.body.money))
+        if (envelopes) {
+            res.send(envelopes)
+        } else {
+            res.status(400).send()
         }
     } catch (err) {
         res.status(400).send(err)
