@@ -4,6 +4,14 @@ const { getAllEnvelopes, addEnvelope, getEnvelopeById, updateEnvelope,
 
 const envelopesRouter = express.Router();
 
+const hasName = (req, res, next) => {
+    if (req.body.name) {
+        next()
+    } else {
+        return res.status(400).send('Name must be included in the request body')
+    }
+}
+
 envelopesRouter.param('envelopeId', (req, res, next, id) => {
     const envelopeId = Number(id)
     try {
@@ -30,7 +38,7 @@ envelopesRouter.get('/', (req, res, next) => {
     res.send(getAllEnvelopes())
 })
 
-envelopesRouter.post('/', (req, res, next) => {
+envelopesRouter.post('/', hasName, (req, res, next) => {
     try {
         const envelope = addEnvelope(req.body.name, Number(req.body.budget))
         if (envelope) {
@@ -47,7 +55,7 @@ envelopesRouter.get('/:envelopeId', (req, res, next) => {
     res.send(req.envelope)
 })
 
-envelopesRouter.put('/:envelopeId', (req, res, next) => {
+envelopesRouter.put('/:envelopeId', hasName, (req, res, next) => {
     try {
         const updatedEnvelope = updateEnvelope(req.envelope.id, req.body.name, Number(req.body.spendingAmount))
         if (updatedEnvelope) {
