@@ -1,5 +1,6 @@
 const express = require('express');
-const { getAllEnvelopes, addEnvelope, getEnvelopeById, updateEnvelope, deleteEnvelopeById } = require('./data')
+const { getAllEnvelopes, addEnvelope, getEnvelopeById, updateEnvelope, 
+    deleteEnvelopeById, transferMoney } = require('./data')
 
 const envelopesRouter = express.Router();
 
@@ -8,6 +9,17 @@ envelopesRouter.param('envelopeId', (req, res, next, id) => {
     try {
         const envelope = getEnvelopeById(envelopeId)
         req.envelope = envelope
+        next()
+    } catch (err) {
+        return res.status(404).send(err)
+    }
+})
+
+envelopesRouter.param('targetEnvelopeId', (req, res, next, id) => {
+    const envelopeId = Number(id)
+    try {
+        const envelope = getEnvelopeById(envelopeId)
+        req.targetEnvelope = envelope
         next()
     } catch (err) {
         return res.status(404).send(err)
@@ -51,6 +63,19 @@ envelopesRouter.put('/:envelopeId', (req, res, next) => {
 envelopesRouter.delete('/:envelopeId', (req, res, next) => {
     deleteEnvelopeById(req.envelope.id)
     res.status(204).send()
+})
+
+envelopesRouter.post('/:envelopeId/:targetEnvelopeId', (req, res, next) => {
+    try {
+        const updatedEnvelopes = transferMoney(req.envelope.id, req.targetEnvelope.id, Number(req.body.amount))
+        if (updatedEnvelopes) {
+            res.send(updatedEnvelopes)
+        } else {
+            res.status(400).send(err)
+        }
+    } catch (err) {
+        res.status(400).send(err)
+    }
 })
 
 module.exports = envelopesRouter

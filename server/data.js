@@ -108,10 +108,20 @@ const deleteEnvelopeById = id => {
     return true
 }
 
+const transferMoney = (sourceEnvelopeId, targetEnvelopeId, amount) => {
+    const sourceEnvelope = getEnvelopeById(sourceEnvelopeId)
+    const targetEnvelope = getEnvelopeById(targetEnvelopeId)
+    if (sourceEnvelope.spendMoney(amount) && targetEnvelope.addMoney(amount)) {
+        return [sourceEnvelope, targetEnvelope]
+    }
+    return null
+}
+
 module.exports = {
     getAllEnvelopes,
     addEnvelope,
     getEnvelopeById,
     updateEnvelope,
     deleteEnvelopeById,
+    transferMoney,
 }
