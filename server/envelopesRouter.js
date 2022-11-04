@@ -1,102 +1,30 @@
 const express = require('express');
-const { getAllEnvelopes, addEnvelope, getEnvelopeById, updateEnvelope, 
-    deleteEnvelopeById, transferMoney, addMoneyToAllEnvelopes } = require('./data')
+const { getAllEnvelopes, getEnvelopeById, addEnvelope, updateEnvelope, deleteEnvelope,
+    getTargetEnvelopeById, takeMoneyFromEnvelope, addMoneyToEnvelope, addMoneyToAllEnvelopes } = require('./queries')
+const { hasName, hasBudget, hasSpendingAmount, hasAmount, hasMoney } = require('./validators')
 
 const envelopesRouter = express.Router();
 
-const hasName = (req, res, next) => {
-    if (req.body.name) {
-        next()
-    } else {
-        return res.status(400).send('Name must be included in the request body')
-    }
-}
+envelopesRouter.param('envelopeId', getEnvelopeById)
 
-envelopesRouter.param('envelopeId', (req, res, next, id) => {
-    const envelopeId = Number(id)
-    try {
-        const envelope = getEnvelopeById(envelopeId)
-        req.envelope = envelope
-        next()
-    } catch (err) {
-        return res.status(404).send(err)
-    }
+envelopesRouter.param('targetEnvelopeId', getTargetEnvelopeById)
+
+envelopesRouter.get('/', getAllEnvelopes)
+
+envelopesRouter.post('/', hasName, hasBudget, addEnvelope)
+
+envelopesRouter.get('/:envelopeId', (req, res) => {
+    res.json(req.envelope)
 })
 
-envelopesRouter.param('targetEnvelopeId', (req, res, next, id) => {
-    const envelopeId = Number(id)
-    try {
-        const envelope = getEnvelopeById(envelopeId)
-        req.targetEnvelope = envelope
-        next()
-    } catch (err) {
-        return res.status(404).send(err)
-    }
+envelopesRouter.put('/:envelopeId', hasName, hasSpendingAmount, updateEnvelope)
+
+envelopesRouter.delete('/:envelopeId', deleteEnvelope)
+
+envelopesRouter.post('/:envelopeId/:targetEnvelopeId', hasAmount, takeMoneyFromEnvelope, addMoneyToEnvelope, (req, res) => {
+    res.json([req.updatedSourceEnvelope, req.updatedTargetEnvelope])
 })
 
-envelopesRouter.get('/', (req, res, next) => {
-    res.send(getAllEnvelopes())
-})
-
-envelopesRouter.post('/', hasName, (req, res, next) => {
-    try {
-        const envelope = addEnvelope(req.body.name, Number(req.body.budget))
-        if (envelope) {
-            res.status(201).send(envelope)
-        } else {
-            res.status(400).send()
-        }
-    } catch (err) {
-        res.status(400).send(err)
-    }
-})
-
-envelopesRouter.get('/:envelopeId', (req, res, next) => {
-    res.send(req.envelope)
-})
-
-envelopesRouter.put('/:envelopeId', hasName, (req, res, next) => {
-    try {
-        const updatedEnvelope = updateEnvelope(req.envelope.id, req.body.name, Number(req.body.spendingAmount))
-        if (updatedEnvelope) {
-            res.send(updatedEnvelope)
-        } else {
-            res.status(400).send()
-        }
-    } catch (err) {
-        res.status(400).send(err)
-    }
-})
-
-envelopesRouter.delete('/:envelopeId', (req, res, next) => {
-    deleteEnvelopeById(req.envelope.id)
-    res.status(204).send()
-})
-
-envelopesRouter.post('/:envelopeId/:targetEnvelopeId', (req, res, next) => {
-    try {
-        const updatedEnvelopes = transferMoney(req.envelope.id, req.targetEnvelope.id, Number(req.body.amount))
-        if (updatedEnvelopes) {
-            res.send(updatedEnvelopes)
-        } else {
-            res.status(400).send(err)
-        }
-    } catch (err) {
-        res.status(400).send(err)
-    }
-})
-
-envelopesRouter.put('/', (req, res, next) => {
-    try {
-        const envelopes = addMoneyToAllEnvelopes(Number(req.body.money))
-        if (envelopes) {
-            res.send(envelopes)
-        } else {
-            res.status(400).send()
-        }
-    } catch (err) {
-        res.status(400).send(err)
-    }
-})
+envelopesRouter.put('/', hasMoney, addMoneyToAllEnvelopes)
 
 module.exports = envelopesRouter
