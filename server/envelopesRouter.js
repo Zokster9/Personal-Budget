@@ -1,6 +1,6 @@
 const express = require('express');
 const { getAllEnvelopes, getEnvelopeById, addEnvelope, updateEnvelope, deleteEnvelope,
-    getTargetEnvelopeById, takeMoneyFromEnvelope, addMoneyToEnvelope, addMoneyToAllEnvelopes } = require('./queries')
+    getTargetEnvelopeById, takeMoneyFromEnvelope, addMoneyToEnvelope, addMoneyToAllEnvelopes } = require('./envelopeQueries')
 const { hasName, hasBudget, hasSpendingAmount, hasAmount, hasMoney } = require('./validators')
 
 const envelopesRouter = express.Router();
