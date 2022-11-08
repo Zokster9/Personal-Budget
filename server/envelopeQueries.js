@@ -1,15 +1,5 @@
-const Pool = require('pg').Pool
+const pool = require('./pool')
 const { isPositiveNum } = require('./validators')
-const dotenv = require(('dotenv'))
-dotenv.config()
-
-const pool = new Pool({
-    user: process.env.PGUSER,
-    host: process.env.PGHOST,
-    database: process.env.PGDATABASE,
-    password: process.env.PGPASSWORD,
-    port: process.env.PGPORT,
-})
 
 const getAllEnvelopes = (req, res) => {
     pool.query('SELECT * FROM envelopes ORDER BY id', (error, results) => {
