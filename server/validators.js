@@ -46,11 +46,38 @@ const isPositiveNum = input => {
     }
 }
 
+const hasPaymentAmount = (req, res, next) => {
+    if (req.body.paymentAmount) {
+        next()
+    } else {
+        return res.status(400).send('Payment amount must be included in the request body')
+    }
+}
+
+const hasPaymentRecipient = (req, res, next) => {
+    if (req.body.paymentRecipient) {
+        next()
+    } else {
+        return res.status(400).send('Payment recipient must be included in the request body')
+    }
+}
+
+const hasEnvelopeId = (req, res, next) => {
+    if (req.body.envelopeId) {
+        next()
+    } else {
+        return res.status(400).send('Envelope id must be included in the request body')
+    }
+}
+
 module.exports = {
     hasName,
     hasBudget,
     hasSpendingAmount,
     hasAmount,
     hasMoney,
+    hasPaymentAmount,
+    hasPaymentRecipient,
+    hasEnvelopeId,
     isPositiveNum
 }
