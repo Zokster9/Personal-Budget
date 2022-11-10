@@ -1,0 +1,526 @@
+{
+  "openapi": "3.0.1",
+  "info": {
+    "title": "Personal Budget API",
+    "version": "1.0.0",
+    "description": "A personal budget app that will allow the user to create and manage their personal budget, through [Envelope](https://www.thebalancemoney.com/what-is-envelope-budgeting-1293682) budgeting. App also includes transactions from your budget envelopes to other people."
+  },
+  "servers": [
+    {
+      "url": "http://localhost:4001/api"
+    }
+  ],
+  "paths": {
+    "/envelopes": {
+      "get": {
+        "summary": "Retrieves all budget envelopes",
+        "description": "",
+        "operationId": "",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "examples": {
+                  "Successfully retrieved all envelopes": {
+                    "value": "[\n    {\n        \"id\": 1,\n        \"name\": \"Groceries\",\n        \"budget\": \"70.00\"\n    },\n    {\n        \"id\": 2,\n        \"name\": \"Rent\",\n        \"budget\": \"200.00\"\n    },\n    {\n        \"id\": 3,\n        \"name\": \"Gas\",\n        \"budget\": \"160.00\"\n    },\n    {\n        \"id\": 4,\n        \"name\": \"Utilities\",\n        \"budget\": \"120.00\"\n    },\n    {\n        \"id\": 5,\n        \"name\": \"Personal Care\",\n        \"budget\": \"160.00\"\n    },\n    {\n        \"id\": 6,\n        \"name\": \"F1\",\n        \"budget\": \"198.00\"\n    }\n]"
+                  }
+                }
+              }
+            },
+            "description": "Retrieve all envelopes"
+          }
+        },
+        "tags": [
+          "Envelope"
+        ]
+      },
+      "post": {
+        "summary": "Adds a new envelope",
+        "description": "An new envelope with the sent data is saved in the database.",
+        "operationId": "",
+        "requestBody": {
+          "description": "Create an envelope",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Envelope"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "description": "Create a new envelope",
+            "content": {
+              "application/json": {
+                "examples": {
+                  "Successfully added a new envelope": {
+                    "value": "[\n    {\n        \"id\": 11,\n        \"name\": \"Minion\",\n        \"budget\": \"100.00\"\n    }\n]"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "Envelope"
+        ]
+      },
+      "put": {
+        "summary": "Adds a certain amount of money to all envelopes",
+        "description": "It adds a specified amount of money to all envelopes in the database",
+        "operationId": "",
+        "tags": [
+          "Envelope"
+        ],
+        "requestBody": {
+          "description": "Amount of money to add to all envelopes",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AddMoney"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Updates all envelopes",
+            "content": {
+              "application/json": {
+                "examples": {
+                  "Updated envelopes": {
+                    "value": "[\n    {\n        \"id\": 1,\n        \"name\": \"Groceries\",\n        \"budget\": \"100.00\"\n    },\n    {\n        \"id\": 2,\n        \"name\": \"Rent\",\n        \"budget\": \"230.00\"\n    },\n    {\n        \"id\": 3,\n        \"name\": \"Gas\",\n        \"budget\": \"190.00\"\n    },\n    {\n        \"id\": 4,\n        \"name\": \"Utilities\",\n        \"budget\": \"150.00\"\n    },\n    {\n        \"id\": 5,\n        \"name\": \"Personal Care\",\n        \"budget\": \"190.00\"\n    },\n    {\n        \"id\": 6,\n        \"name\": \"F1\",\n        \"budget\": \"227.00\"\n    },\n    {\n        \"id\": 11,\n        \"name\": \"Minion\",\n        \"budget\": \"130.00\"\n    }\n]"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/envelopes/{id}": {
+      "get": {
+        "summary": "Retrieves an envelope",
+        "description": "Retrieves an envelope from the database by id",
+        "operationId": "",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "ID of envelope to return",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "tags": [
+          "Envelope"
+        ],
+        "responses": {
+          "200": {
+            "description": "Get an envelope",
+            "content": {
+              "application/json": {
+                "examples": {
+                  "Get an envelope": {
+                    "value": "[\n    {\n        \"id\": 6,\n        \"name\": \"F1\",\n        \"budget\": \"227.00\"\n    }\n]"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "summary": "Updates an envelope",
+        "description": "Updates an envelope from the database by id",
+        "operationId": "",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "ID of envelope to update",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "requestBody": {
+          "description": "Update an existent envelope",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Envelope"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "examples": {
+                  "Successfully take money from an envelope": {
+                    "value": "[\n    {\n        \"id\": 6,\n        \"name\": \"F1\",\n        \"budget\": \"197.00\"\n    }\n]"
+                  }
+                }
+              }
+            },
+            "description": "Update an envelopee"
+          }
+        },
+        "tags": [
+          "Envelope"
+        ]
+      },
+      "delete": {
+        "summary": "Deletes an envelope",
+        "description": "Deletes an envelope from the database by id",
+        "operationId": "",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "ID of envelope to return",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "tags": [
+          "Envelope"
+        ],
+        "responses": {
+          "204": {
+            "description": "Delete an envelope",
+            "content": {
+              "application/json": {
+                "examples": {
+                  "Deletes an envelope": {
+                    "value": "{}"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/envelope/{source_envelope_id}/{target_envelope_id}": {
+      "post": {
+        "summary": "Transfer money from one envelope to another",
+        "description": "Transfers money from the source envelope to the target envelope",
+        "operationId": "",
+        "requestBody": {
+          "description": "Transfer money from one envelope to another",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/TransferMoney"
+              }
+            }
+          },
+          "required": true
+        },
+        "parameters": [
+          {
+            "name": "source_envelope_id",
+            "in": "path",
+            "description": "ID of an envelope to take money from",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          },
+          {
+            "name": "target_envelope_id",
+            "in": "path",
+            "description": "ID of an envelope to add money to",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "tags": [
+          "Envelope"
+        ],
+        "responses": {
+          "200": {
+            "description": "Successfully transfered money from one envelope to another",
+            "content": {
+              "application/json": {
+                "examples": {
+                  "Updated envelopes": {
+                    "value": "[\n    {\n        \"id\": 1,\n        \"name\": \"Groceries\",\n        \"budget\": \"80.00\"\n    },\n    {\n        \"id\": 6,\n        \"name\": \"F1\",\n        \"budget\": \"247.00\"\n    }\n]"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/transactions": {
+      "get": {
+        "summary": "Retrieves all transactions",
+        "description": "Retrieves all transactions from the database",
+        "operationId": "",
+        "tags": [
+          "Transaction"
+        ],
+        "responses": {
+          "200": {
+            "description": "Retrieve all transactions",
+            "content": {
+              "application/json": {
+                "examples": {
+                  "Retrieve all transactions": {
+                    "value": "[\n    {\n        \"id\": 2,\n        \"date\": \"2022-11-09T23:00:00.000Z\",\n        \"payment_amount\": \"70.00\",\n        \"payment_recipient\": \"Chipi Sakalovic\",\n        \"envelope_id\": 2\n    },\n    {\n        \"id\": 3,\n        \"date\": \"2022-11-09T23:00:00.000Z\",\n        \"payment_amount\": \"40.00\",\n        \"payment_recipient\": \"Lemara\",\n        \"envelope_id\": 4\n    }\n]"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "summary": "Adds a new transaction",
+        "description": "Adds a new transaction to the database",
+        "operationId": "",
+        "requestBody": {
+          "description": "Create a new transaction",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Transaction"
+              }
+            }
+          },
+          "required": true
+        },
+        "tags": [
+          "Transaction"
+        ],
+        "responses": {
+          "201": {
+            "description": "Creates a new transaction",
+            "content": {
+              "application/json": {
+                "examples": {
+                  "Created transaction": {
+                    "value": "[\n    {\n        \"id\": 3,\n        \"date\": \"2022-11-09T23:00:00.000Z\",\n        \"payment_amount\": \"40.00\",\n        \"payment_recipient\": \"Lemara\",\n        \"envelope_id\": 4\n    }\n]"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/transactions/{id}": {
+      "get": {
+        "summary": "Retrieves a transaction",
+        "description": "Retrieves a transaction from the database by id",
+        "operationId": "",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "ID of a transaction to return",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "tags": [
+          "Transaction"
+        ],
+        "responses": {
+          "200": {
+            "description": "Retrieve a transaction",
+            "content": {
+              "application/json": {
+                "examples": {
+                  "Retrieve a transaction": {
+                    "value": "[\n    {\n        \"id\": 2,\n        \"date\": \"2022-11-09T23:00:00.000Z\",\n        \"payment_amount\": \"70.00\",\n        \"payment_recipient\": \"Chipi Sakalovic\",\n        \"envelope_id\": 2\n    }\n]"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "summary": "Updates a transaction",
+        "description": "Updates a transaction from the database by id",
+        "operationId": "",
+        "requestBody": {
+          "description": "Create a new transaction",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/TransactionUpdate"
+              }
+            }
+          },
+          "required": true
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "ID of a transaction to update",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "tags": [
+          "Transaction"
+        ],
+        "responses": {
+          "200": {
+            "description": "Update a transaction",
+            "content": {
+              "application/json": {
+                "examples": {
+                  "Update a transaction": {
+                    "value": "[\n    {\n        \"id\": 2,\n        \"date\": \"2022-11-09T23:00:00.000Z\",\n        \"payment_amount\": \"80.00\",\n        \"payment_recipient\": \"Chipi Sakalovic\",\n        \"envelope_id\": 2\n    }\n]"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "summary": "Deletes a transaction",
+        "description": "Deletes a transaction from the database by id",
+        "operationId": "",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "ID of a transaction to delete",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "tags": [
+          "Transaction"
+        ],
+        "responses": {
+          "204": {
+            "description": "Delete a transaction",
+            "content": {
+              "application/json": {
+                "examples": {
+                  "Delete a transaction": {
+                    "value": "{}"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "Envelope": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "budget": {
+            "type": "number"
+          }
+        },
+        "xml": {
+          "name": "Envelope"
+        }
+      },
+      "Transaction": {
+        "type": "object",
+        "properties": {
+          "date": {
+            "type": "string"
+          },
+          "paymentAmount": {
+            "type": "number"
+          },
+          "paymentRecipient": {
+            "type": "string"
+          },
+          "envelopeId": {
+            "type": "integer"
+          }
+        },
+        "xml": {
+          "name": "Transaction"
+        }
+      },
+      "AddMoney": {
+        "type": "object",
+        "properties": {
+          "money": {
+            "type": "number"
+          }
+        },
+        "xml": {
+          "name": "AddMoney"
+        }
+      },
+      "TransferMoney": {
+        "type": "object",
+        "properties": {
+          "amount": {
+            "type": "number"
+          }
+        },
+        "xml": {
+          "name": "TransferMoney"
+        }
+      },
+      "TransactionUpdate": {
+        "type": "object",
+        "properties": {
+          "paymentAmount": {
+            "type": "number"
+          },
+          "paymentRecipient": {
+            "type": "string"
+          },
+          "envelopeId": {
+            "type": "integer"
+          }
+        },
+        "xml": {
+          "name": "TransactionUpdate"
+        }
+      }
+    }
+  }
+}
